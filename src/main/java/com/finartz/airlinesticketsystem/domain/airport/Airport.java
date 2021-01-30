@@ -1,15 +1,17 @@
 package com.finartz.airlinesticketsystem.domain.airport;
 
+import com.finartz.airlinesticketsystem.domain.route.Route;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.mapping.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Entity
@@ -54,4 +56,13 @@ public class Airport {
     @ApiModelProperty(notes="Country area code is distinguished parameters for country.Country area code should have at least 2 characters and at most 3 characters")
     @NotNull
     private String countryAreaCode;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "airport_route_from_id")
+    private List<Route> routeFirst;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "airport_route_to_id")
+    private List<Route> airportSecond;
+
 }

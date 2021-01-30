@@ -1,9 +1,12 @@
 package com.finartz.airlinesticketsystem.model.airport;
 
+import com.finartz.airlinesticketsystem.domain.route.Route;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.mapping.Set;
 
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 @Data
@@ -39,5 +42,6 @@ public class AirportDto {
     @Size(min=2, max=3, message="Country area code should have at least 2 characters and at most 3 characters")
     @ApiModelProperty(notes="Country area code is distinguished parameters for country.Country area code should have at least 2 characters and at most 3 characters")
     private String countryAreaCode;
+
 
 }

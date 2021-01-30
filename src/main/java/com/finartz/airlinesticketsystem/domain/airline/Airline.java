@@ -3,7 +3,9 @@ package com.finartz.airlinesticketsystem.domain.airline;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "id")
+@ToString
 @ApiModel(description="All details about the airline.")
 public class Airline {
 
