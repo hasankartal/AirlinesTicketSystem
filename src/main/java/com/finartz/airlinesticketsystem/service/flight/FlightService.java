@@ -1,6 +1,5 @@
 package com.finartz.airlinesticketsystem.service.flight;
 
-import com.finartz.airlinesticketsystem.model.airline.AirlineDto;
 import com.finartz.airlinesticketsystem.model.flight.FlightDto;
 import org.springframework.http.ResponseEntity;
 
@@ -14,4 +13,5 @@ public interface FlightService {
     FlightDto findById(long id);
     List<FlightDto> findByParams(Boolean status, BigDecimal flightFee, Integer passengerCount, Date flightDate, Long routeFlight);
     ResponseEntity<Object> createFlight(FlightDto flightDto);
+    ResponseEntity<Object> increaseFlightQuota(Long flightNo, Integer passengerCount);
 }

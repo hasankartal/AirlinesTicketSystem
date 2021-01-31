@@ -29,10 +29,16 @@ public class FlightDto {
     @NotNull
     @Min(value = 1,  message = "The value must be minimum 1")
     @Max(value = 9999,  message = "The value must be maximum 9999")
-    @ApiModelProperty(notes="The number of passengers on the plane")
+    @ApiModelProperty(notes="Starting The number of passengers on the plane")
     private int passengerCount;
 
     @NotNull
-    @ApiModelProperty(notes="Flight fee")
+    @ApiModelProperty(notes="Starting flight fee")
     private BigDecimal flightFee;
+
+    @ApiModelProperty(notes="Present the number of passengers on the plane after increasement quato")
+    private int passengerCountPresent;
+
+    @ApiModelProperty(notes="Present flight fee after increasement quota")
+    private BigDecimal flightFeePresent;
 }

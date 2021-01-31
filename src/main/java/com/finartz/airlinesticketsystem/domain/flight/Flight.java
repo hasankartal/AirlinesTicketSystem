@@ -3,7 +3,6 @@ package com.finartz.airlinesticketsystem.domain.flight;
 import com.finartz.airlinesticketsystem.domain.route.Route;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,12 +30,20 @@ public class Flight {
     private Date flightDate;
 
     @NotNull
-    @ApiModelProperty(notes="The number of passengers on the plane")
+    @ApiModelProperty(notes="Starting the number of passengers on the plane")
     private int passengerCount;
 
     @NotNull
-    @ApiModelProperty(notes="Flight fee")
+    @ApiModelProperty(notes="Starting flight fee")
     private BigDecimal flightFee;
+
+    @NotNull
+    @ApiModelProperty(notes="Present the number of passengers on the plane after increasement quato")
+    private int passengerCountPresent;
+
+    @NotNull
+    @ApiModelProperty(notes="Present flight fee after increasement quota")
+    private BigDecimal flightFeePresent;
 
     public Long getId() {
         return id;
@@ -84,5 +91,21 @@ public class Flight {
 
     public void setFlightFee(BigDecimal flightFee) {
         this.flightFee = flightFee;
+    }
+
+    public int getPassengerCountPresent() {
+        return passengerCountPresent;
+    }
+
+    public void setPassengerCountPresent(int passengerCountPresent) {
+        this.passengerCountPresent = passengerCountPresent;
+    }
+
+    public BigDecimal getFlightFeePresent() {
+        return flightFeePresent;
+    }
+
+    public void setFlightFeePresent(BigDecimal flightFeePresent) {
+        this.flightFeePresent = flightFeePresent;
     }
 }

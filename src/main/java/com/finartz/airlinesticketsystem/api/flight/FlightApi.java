@@ -45,12 +45,12 @@ public class FlightApi {
 
     @GetMapping("/flights/search")
     public List<FlightDto> retrieveFlights(@RequestParam(required = false) Boolean status,
-                                           @RequestParam(required = false) BigDecimal flightFee,
-                                           @RequestParam(required = false) Integer passengerCount,
+                                           @RequestParam(required = false) BigDecimal flightFeePresent,
+                                           @RequestParam(required = false) Integer passengerCountPresent,
                                            @RequestParam(required = false) Date flightDate,
                                            @RequestParam(required = false) Long routeFlight) {
         logger.info("retrieveFlights search service started");
-        List<FlightDto> flights = service.findByParams(status, flightFee, passengerCount, flightDate, routeFlight);
+        List<FlightDto> flights = service.findByParams(status, flightFeePresent, passengerCountPresent, flightDate, routeFlight);
         return flights;
     }
 
@@ -61,6 +61,21 @@ public class FlightApi {
         ResponseEntity<Object> savedFlight;
         try {
             savedFlight = service.createFlight(flightDto);
+            return savedFlight;
+        } catch (DataIntegrityViolationDbException ex) {
+            logger.error("Error in createFlight service Could not create flight: {" + ex + " }");
+            throw new DataIntegrityViolationDbException("Could not create flight");
+        }
+    }
+
+    @PostMapping("/flight/{flightNo}/increase")
+    public ResponseEntity<Object> increaseFlightQuota(@PathVariable(required = true) Long flightNo,
+                                                      @RequestBody(required = true) FlightDto flightDto) {
+        logger.info("increaseFlightQuota service started");
+
+        ResponseEntity<Object> savedFlight;
+        try {
+            savedFlight = service.increaseFlightQuota(flightNo,flightDto.getPassengerCount());
             return savedFlight;
         } catch (DataIntegrityViolationDbException ex) {
             logger.error("Error in createFlight service Could not create flight: {" + ex + " }");

@@ -1,8 +1,8 @@
 package com.finartz.airlinesticketsystem.service.flight.impl;
 
-import com.finartz.airlinesticketsystem.domain.airport.Airport;
 import com.finartz.airlinesticketsystem.domain.flight.Flight;
 import com.finartz.airlinesticketsystem.domain.route.Route;
+import com.finartz.airlinesticketsystem.domain.ticket.Ticket;
 import com.finartz.airlinesticketsystem.exception.DataIntegrityViolationDbException;
 import com.finartz.airlinesticketsystem.exception.flight.FlightNotFoundException;
 import com.finartz.airlinesticketsystem.model.airport.AirportDto;
@@ -74,6 +74,8 @@ public class FlightServiceImpl implements FlightService {
             flightDto.setFlightDate(item.getFlightDate());
             flightDto.setFlightFee(item.getFlightFee());
             flightDto.setPassengerCount(item.getPassengerCount());
+            flightDto.setFlightFeePresent(item.getFlightFeePresent());
+            flightDto.setPassengerCountPresent(item.getPassengerCountPresent());
             flightDto.setStatus(item.getStatus());
             flightDtos.add(flightDto);
         });
@@ -122,23 +124,25 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setFlightDate(flight.get().getFlightDate());
         flightDto.setFlightFee(flight.get().getFlightFee());
         flightDto.setPassengerCount(flight.get().getPassengerCount());
+        flightDto.setFlightFeePresent(flight.get().getFlightFeePresent());
+        flightDto.setPassengerCountPresent(flight.get().getPassengerCountPresent());
         flightDto.setStatus(flight.get().getStatus());
 
         return flightDto;
     }
 
     @Override
-    public List<FlightDto> findByParams(Boolean status, BigDecimal flightFee, Integer passengerCount, Date flightDate, Long routeFlight) {
+    public List<FlightDto> findByParams(Boolean status, BigDecimal flightFeePresent, Integer passengerCountPresent, Date flightDate, Long routeFlight) {
         String queryString = "Select e from Flight e where '1' = '1'";
 
         if (status != null) {
             queryString += " and e.status = :status";
         }
-        if (flightFee != null) {
-            queryString += " and e.flightFee = :flightFee";
+        if (flightFeePresent != null) {
+            queryString += " and e.flightFeePresent = :flightFeePresent";
         }
-        if (passengerCount != null) {
-            queryString += " and e.passengerCount = :passengerCount";
+        if (passengerCountPresent != null) {
+            queryString += " and e.passengerCountPresent = :passengerCountPresent";
         }
         if (flightDate != null) {
             queryString += " and e.flightDate = :flightDate";
@@ -151,11 +155,11 @@ public class FlightServiceImpl implements FlightService {
         if (status != null) {
             query.setParameter("status", status);
         }
-        if (flightFee != null) {
-            query.setParameter("flightFee", flightFee);
+        if (flightFeePresent != null) {
+            query.setParameter("flightFeePresent", flightFeePresent);
         }
-        if (passengerCount != null) {
-            query.setParameter("passengerCount", passengerCount);
+        if (passengerCountPresent != null) {
+            query.setParameter("passengerCountPresent", passengerCountPresent);
         }
         if (flightDate != null) {
             query.setParameter("flightDate", flightDate);
@@ -192,6 +196,9 @@ public class FlightServiceImpl implements FlightService {
         flight.setFlightDate(flightDto.getFlightDate());
         flight.setFlightFee(flightDto.getFlightFee());
         flight.setPassengerCount(flightDto.getPassengerCount());
+        flight.setFlightFeePresent(flightDto.getFlightFee());
+        flight.setPassengerCountPresent(flightDto.getPassengerCount());
+
 
         Route route = new Route();
         route.setId(flightDto.getRouteDto().getId());
@@ -212,5 +219,31 @@ public class FlightServiceImpl implements FlightService {
                         .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @Override
+    public ResponseEntity<Object> increaseFlightQuota(Long flightNo, Integer passengerCount) {
+        Optional<Flight> flightOptional = flightRepository.findById(flightNo);
+        if(!flightOptional.isPresent()) {
+            throw new FlightNotFoundException("Flight No-" + flightNo);
+        }
+        Flight flight = flightOptional.get();
+        int startingPassengerCount = flight.getPassengerCount();
+        int presentPassengerCount = flight.getPassengerCountPresent() + passengerCount.intValue();
+        flight.setPassengerCountPresent(presentPassengerCount);
+
+        long percentageIncreasePassenger = 100 - (startingPassengerCount * 100 / presentPassengerCount);
+        int percentage = Long.valueOf(percentageIncreasePassenger / 10).intValue() * 10;
+
+        BigDecimal startingFlightFee = flight.getFlightFee();
+
+        BigDecimal oneHundred = new BigDecimal(100);
+        BigDecimal percentageDecimal = new BigDecimal(percentage);
+        BigDecimal presentFlightFee = (startingFlightFee.divide( oneHundred ).multiply(percentageDecimal).add(startingFlightFee));
+        flight.setFlightFeePresent(presentFlightFee);
+
+        flightRepository.save(flight);
+
+        return ResponseEntity.ok().build();
     }
 }
