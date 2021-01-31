@@ -1,11 +1,13 @@
 package com.finartz.airlinesticketsystem.domain.route;
 
 import com.finartz.airlinesticketsystem.domain.airport.Airport;
+import com.finartz.airlinesticketsystem.domain.flight.Flight;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @ApiModel(description="All details about the route.")
@@ -30,6 +32,10 @@ public class Route {
     @ApiModelProperty(notes="Airport route to describes where airplane lands")
     @JoinColumn(name="airport_route_to_id", nullable=false)
     private Airport airportRouteTo;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_flight_id")
+    private List<Flight> flight;
 
     public Long getId() {
         return id;
@@ -61,5 +67,13 @@ public class Route {
 
     public void setAirportRouteTo(Airport airportRouteTo) {
         this.airportRouteTo = airportRouteTo;
+    }
+
+    public List<Flight> getFlight() {
+        return flight;
+    }
+
+    public void setFlight(List<Flight> flight) {
+        this.flight = flight;
     }
 }
