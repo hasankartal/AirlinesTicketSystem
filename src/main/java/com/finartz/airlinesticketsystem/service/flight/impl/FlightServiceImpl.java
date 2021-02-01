@@ -182,7 +182,8 @@ public class FlightServiceImpl implements FlightService {
             flightDto.setPassengerCount(item.getPassengerCount());
             flightDto.setFlightFee(item.getFlightFee());
             flightDto.setFlightDate(item.getFlightDate());
-
+            flightDto.setPassengerCountPresent(item.getPassengerCountPresent());
+            flightDto.setFlightFeePresent(item.getFlightFeePresent());
 
             flightDtos.add(flightDto);
         });

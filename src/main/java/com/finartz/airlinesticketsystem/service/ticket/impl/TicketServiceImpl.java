@@ -85,6 +85,7 @@ public class TicketServiceImpl implements TicketService {
         ticketDto.setCardNo(ticket.get().getCardNo());
         ticketDto.setStatus(ticket.get().getStatus());
         ticketDto.setTransactionStatus(ticket.get().getTransactionStatus());
+        ticketDto.setFlightFee(ticket.get().getFlightFee());
 
         return ticketDto;
     }
@@ -147,7 +148,7 @@ public class TicketServiceImpl implements TicketService {
         Date flightDate = ticketOptional.get().getFlightTicket().getFlightDate();
         Calendar today = Calendar.getInstance();
         Date now = today.getTime();
-        if(flightDate.after(now)) {
+        if(flightDate.before(now)) {
             throw new DateTimeException("It is not allowed to buy ticket");
         }
 
