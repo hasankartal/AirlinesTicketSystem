@@ -5,16 +5,9 @@ This aplication is a airplane ticket system. You can add and search airplane, ai
 Use the Java IDE platform.
 
 ## Usage
-There is a basic authentication for security. 
-When you send a request, you have to add username and password informations which are written as below.
-
-Username : user
-Password : password
-
 It can be found documentation in this address. When it is asked username and password, username and password informations which are written as above.
 http://localhost:8081/v2/api-docs
 http://localhost:8081/swagger-ui/index.html
-http://localhost:8081/swagger-ui.html
 
 It can be controlled database at this address.
 http://localhost:8081/h2-console/
