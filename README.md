@@ -5,8 +5,8 @@ This aplication is a airplane ticket system. You can add and search airplane, ai
 Use the Java IDE platform.
 
 ## Usage
-It can be found documentation in this address. When it is asked username and password, username and password informations which are written as above.
-http://localhost:8081/v2/api-docs
+It can be found documentation in this address.
+http://localhost:8081/v2/api-docs \
 http://localhost:8081/swagger-ui/index.html
 
 It can be controlled database at this address.
@@ -21,3 +21,9 @@ http://localhost:8081/
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+##To Do List
+Authentication will be implemented.\
+Unit tests will be written.\
+Pagination and sorting will be implemented.\
+Some values that is send to client won't be returned.
